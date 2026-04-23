@@ -78,6 +78,7 @@ export function Home() {
       <Card className="flex flex-col gap-4">
         <TextField
           label="Your nickname"
+          hint="Shown to other players when you create or join a room."
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
           placeholder="e.g. Rolf"
@@ -85,14 +86,25 @@ export function Home() {
           autoComplete="nickname"
           maxLength={24}
         />
+      </Card>
+
+      <Card className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
+          <h2 className="font-display text-2xl font-bold">Start a new room</h2>
+          <p className="text-sm opacity-70">Invite your friends with a room code.</p>
+        </div>
         <Button variant="primary" onClick={handleCreate} disabled={busy !== null}>
           {busy === "create" ? "Creating…" : "Create a room"}
         </Button>
       </Card>
 
       <Card className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
+          <h2 className="font-display text-2xl font-bold">Join a room</h2>
+          <p className="text-sm opacity-70">Got a code from a friend? Enter it below.</p>
+        </div>
         <TextField
-          label="Join with a code"
+          label="Room code"
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase())}
           placeholder="e.g. ABC23F"
