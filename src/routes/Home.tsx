@@ -9,7 +9,8 @@ export function Home() {
   const navigate = useNavigate();
   const [nickname, setNickname] = useState(() => localStorage.getItem(NICKNAME_KEY) ?? "");
   const [code, setCode] = useState("");
-  const [busy, setBusy] = useState<"create" | "join" | null>(null);
+  const [tvCode, setTvCode] = useState("");
+  const [busy, setBusy] = useState<"create" | "join" | "tv" | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   function persistNickname(name: string) {
@@ -33,6 +34,27 @@ export function Home() {
       void navigate(`/r/${data as string}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not create room");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function handleJoinAsTv() {
+    setError(null);
+    setBusy("tv");
+    try {
+      const trimmedCode = tvCode.trim().toUpperCase();
+      if (!trimmedCode) {
+        setError("Enter the room code");
+        return;
+      }
+      const { data, error: rpcError } = await supabase.rpc("join_as_spectator", {
+        p_code: trimmedCode,
+      });
+      if (rpcError) throw rpcError;
+      void navigate(`/tv/${data as string}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not join as TV");
     } finally {
       setBusy(null);
     }
@@ -115,6 +137,28 @@ export function Home() {
         />
         <Button variant="secondary" onClick={handleJoin} disabled={busy !== null}>
           {busy === "join" ? "Joining…" : "Join room"}
+        </Button>
+      </Card>
+
+      <Card className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
+          <h2 className="font-display text-2xl font-bold">Big screen mode</h2>
+          <p className="text-sm opacity-70">
+            Use on a TV or laptop to show the game to everyone in the room.
+          </p>
+        </div>
+        <TextField
+          label="Room code"
+          value={tvCode}
+          onChange={(e) => setTvCode(e.target.value.toUpperCase())}
+          placeholder="e.g. ABC23F"
+          autoCapitalize="characters"
+          autoComplete="off"
+          maxLength={6}
+          inputMode="text"
+        />
+        <Button variant="secondary" onClick={handleJoinAsTv} disabled={busy !== null}>
+          {busy === "tv" ? "Connecting…" : "Open big screen"}
         </Button>
       </Card>
 

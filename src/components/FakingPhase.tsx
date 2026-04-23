@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
 import { supabase } from "../lib/supabase.ts";
-import { selectCurrentRound, useGameStore } from "../store/gameStore.ts";
+import { selectCurrentRound, useActivePlayers, useGameStore } from "../store/gameStore.ts";
 import { Banner, Button, Card, Page, TextArea } from "./ui.tsx";
 import { RoundHeader } from "./RoundHeader.tsx";
 
 export function FakingPhase() {
   const round = useGameStore(selectCurrentRound);
   const prompts = useGameStore((s) => s.prompts);
-  const players = useGameStore((s) => s.players);
+  const players = useActivePlayers();
   const fakes = useGameStore((s) => s.fakes);
   const myId = useGameStore((s) => s.myId);
 

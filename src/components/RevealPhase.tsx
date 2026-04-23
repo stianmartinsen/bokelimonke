@@ -1,6 +1,11 @@
 import { useMemo, useState } from "react";
 import { supabase } from "../lib/supabase.ts";
-import { selectCurrentRound, selectMe, useGameStore } from "../store/gameStore.ts";
+import {
+  selectCurrentRound,
+  selectMe,
+  useActivePlayers,
+  useGameStore,
+} from "../store/gameStore.ts";
 import { Banner, Button, Card, Page } from "./ui.tsx";
 import { RoundHeader } from "./RoundHeader.tsx";
 
@@ -8,7 +13,7 @@ export function RevealPhase() {
   const room = useGameStore((s) => s.room);
   const round = useGameStore(selectCurrentRound);
   const prompts = useGameStore((s) => s.prompts);
-  const players = useGameStore((s) => s.players);
+  const players = useActivePlayers();
   const sentences = useGameStore((s) => s.sentences);
   const fakes = useGameStore((s) => s.fakes);
   const votes = useGameStore((s) => s.votes);

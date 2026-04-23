@@ -1,4 +1,4 @@
-import { useGameStore } from "../store/gameStore.ts";
+import { useActivePlayers, useGameStore } from "../store/gameStore.ts";
 import type { Round } from "../lib/types.ts";
 
 interface RoundHeaderProps {
@@ -9,7 +9,7 @@ interface RoundHeaderProps {
 
 export function RoundHeader({ round, authorName, subtitle }: RoundHeaderProps) {
   const room = useGameStore((s) => s.room);
-  const totalRounds = useGameStore((s) => s.players.length);
+  const totalRounds = useActivePlayers().length;
 
   return (
     <header className="flex flex-col items-center gap-1 text-center">

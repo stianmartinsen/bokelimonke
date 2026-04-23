@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { ensureSignedIn } from "./lib/supabase.ts";
 import { Home } from "./routes/Home.tsx";
 import { Room } from "./routes/Room.tsx";
+import { Tv } from "./routes/Tv.tsx";
 
 export function App() {
   const [ready, setReady] = useState(false);
@@ -39,6 +40,7 @@ export function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/r/:code" element={<Room />} />
+      <Route path="/tv/:code" element={<Tv />} />
       <Route path="*" element={<Home />} />
     </Routes>
   );

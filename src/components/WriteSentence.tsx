@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import { supabase } from "../lib/supabase.ts";
-import { useGameStore } from "../store/gameStore.ts";
+import { useActivePlayers, useGameStore } from "../store/gameStore.ts";
 import { Banner, Button, Card, Page, TextArea } from "./ui.tsx";
 
 export function WriteSentence() {
   const room = useGameStore((s) => s.room);
-  const players = useGameStore((s) => s.players);
+  const players = useActivePlayers();
   const sentences = useGameStore((s) => s.sentences);
   const myId = useGameStore((s) => s.myId);
 

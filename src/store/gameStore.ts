@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 import type { Fake, Player, Round, Room, Sentence, Vote } from "../lib/types.ts";
 
 export interface SentencePrompt {
@@ -91,4 +92,22 @@ export function selectCurrentRound(state: GameState): Round | null {
 export function selectMe(state: GameState): Player | null {
   if (!state.myId) return null;
   return state.players.find((p) => p.id === state.myId) ?? null;
+}
+
+function selectActivePlayers(state: GameState): Player[] {
+  return state.players.filter((p) => !p.is_spectator);
+}
+
+function selectSpectators(state: GameState): Player[] {
+  return state.players.filter((p) => p.is_spectator);
+}
+
+// Wrap filtering selectors in useShallow so they don't trigger infinite
+// re-renders: they return a fresh array reference every call.
+export function useActivePlayers(): Player[] {
+  return useGameStore(useShallow(selectActivePlayers));
+}
+
+export function useSpectators(): Player[] {
+  return useGameStore(useShallow(selectSpectators));
 }

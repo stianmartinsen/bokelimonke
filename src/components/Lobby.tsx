@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase.ts";
-import { selectMe, useGameStore } from "../store/gameStore.ts";
+import { selectMe, useActivePlayers, useGameStore, useSpectators } from "../store/gameStore.ts";
 import { Banner, Button, Card, Page } from "./ui.tsx";
 
 export function Lobby() {
   const room = useGameStore((s) => s.room);
-  const players = useGameStore((s) => s.players);
+  const players = useActivePlayers();
+  const spectators = useSpectators();
   const me = useGameStore(selectMe);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -86,6 +87,11 @@ export function Lobby() {
             </li>
           ))}
         </ul>
+        {spectators.length > 0 ? (
+          <p className="text-center text-xs opacity-60">
+            {spectators.length === 1 ? "1 TV connected" : `${spectators.length} TVs connected`}
+          </p>
+        ) : null}
       </Card>
 
       {isHost ? (

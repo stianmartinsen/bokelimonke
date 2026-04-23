@@ -17,6 +17,7 @@ export interface Player {
   score: number;
   joined_at: string;
   is_host: boolean;
+  is_spectator: boolean;
 }
 
 export interface Sentence {
@@ -68,7 +69,7 @@ export interface Database {
       };
       players: {
         Row: Player;
-        Insert: Insertable<Player, "joined_at" | "score" | "is_host">;
+        Insert: Insertable<Player, "joined_at" | "score" | "is_host" | "is_spectator">;
         Update: Updatable<Player>;
         Relationships: [];
       };
@@ -105,6 +106,10 @@ export interface Database {
       };
       join_room: {
         Args: { p_code: string; p_nickname: string };
+        Returns: string;
+      };
+      join_as_spectator: {
+        Args: { p_code: string };
         Returns: string;
       };
       start_game: {

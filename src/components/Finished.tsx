@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { selectMe, useGameStore } from "../store/gameStore.ts";
+import { selectMe, useActivePlayers, useGameStore } from "../store/gameStore.ts";
 import { Button, Card, Page } from "./ui.tsx";
 
 export function Finished() {
   const navigate = useNavigate();
-  const players = useGameStore((s) => s.players);
+  const players = useActivePlayers();
   const me = useGameStore(selectMe);
 
   const sorted = [...players].sort((a, b) => b.score - a.score);
